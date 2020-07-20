@@ -3,5 +3,9 @@
 
     git clone git@github.com:regCore/regCore.git && cd regCore
     python -m venv venv
-    pip install -r requirements-dev.txt
+    source venv/bin/activate
+    pip install -r requirements.txt -r requirements-dev.txt
+    cp regcore/settings-dev.py regcore/settings.py
     pre-commit install
+
+    ./manage.py runserver
