@@ -8,4 +8,5 @@
     cp regcore/settings-dev.py regcore/settings.py
     pre-commit install
 
+    ./manage.py migrate
     ./manage.py runserver
