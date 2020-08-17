@@ -70,99 +70,29 @@ class Event(models.Model):
     onsite_reg_end = models.DateTimeField(verbose_name="On-site Registration End")
     event_start = models.DateField(verbose_name="Event Start Date")
     event_end = models.DateField(verbose_name="Event End Date")
-    default = models.BooleanField(
-        default=False,
-        verbose_name="Default",
-        help_text="The first default event will be used as the basis for all current event configuration",
-    )
-    new_staff_discount = models.ForeignKey(
-        Discount,
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="newStaffEvent",
-        verbose_name="New Staff Discount",
-        help_text="Apply a discount for new staff registrations",
-    )
-    staff_discount = models.ForeignKey(
-        Discount,
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="staffEvent",
-        verbose_name="Staff Discount",
-        help_text="Apply a discount for any staff registrations",
-    )
-    dealer_discount = models.ForeignKey(
-        Discount,
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="dealerEvent",
-        verbose_name="Dealer Discount",
-        help_text="Apply a discount for any dealer registrations",
-    )
-    allow_online_minor_reg = models.BooleanField(
-        default=False,
-        verbose_name="Allow online minor registration",
-        help_text="Allow registration for anyone age 13 and older online. "
-        "Otherwise, registration is restricted to those 18 or older.",
-    )
-    collect_address = models.BooleanField(
-        default=True,
-        verbose_name="Collect Address",
-        help_text="Disable to skip collecting a mailing address for each " "attendee.",
-    )
-    collect_billing_address = models.BooleanField(
-        default=True,
-        verbose_name="Collect Billing Address",
-        help_text="Disable to skip collecting a billing address for each "
-        "order. Note that a billing address and buyer email is required "
-        "to qualify for Square's Chargeback protection.",
-    )
     registration_email = models.CharField(
         max_length=200,
         verbose_name="Registration Email",
         help_text="Email to display on error messages for attendee registration",
         blank=True,
-        default=settings.APIS_DEFAULT_EMAIL,
     )
     staff_email = models.CharField(
         max_length=200,
         verbose_name="Staff Email",
         help_text="Email to display on error messages for staff registration",
         blank=True,
-        default=settings.APIS_DEFAULT_EMAIL,
     )
     dealer_email = models.CharField(
         max_length=200,
         verbose_name="Dealer Email",
         help_text="Email to display on error messages for dealer registration",
         blank=True,
-        default=settings.APIS_DEFAULT_EMAIL,
     )
-    badge_theme = models.CharField(
-        max_length=200,
-        verbose_name="Badge Theme",
-        help_text="Name of badge theme to use for printing",
-        blank=False,
-        default="apis",
-    )
-    code_of_conduct = models.CharField(
-        max_length=500,
-        verbose_name="Code of Conduct",
-        help_text="Link to code of conduct agreement",
-        blank=True,
-        default=settings.CODE_OF_CONDUCT,
+    code_of_conduct = models.FileField(
+        upload_to="codes_of_conduct/%Y/%m/%d", blank=True, null=True
     )
     charity = models.ForeignKey(
         Charity, null=True, blank=True, on_delete=models.SET_NULL
-    )
-    donations = models.DecimalField(
-        max_digits=12,
-        decimal_places=2,
-        default=0,
-        help_text="External donations to add to metrics",
     )
 
 
@@ -189,31 +119,13 @@ class PriceLevelOption(models.Model):
     option_image = models.ImageField(
         upload_to="price_level/%Y/%m/%d", blank=True, null=True
     )
-    required = models.BooleanField(default=False)
     active = models.BooleanField(default=False)
     rank = models.IntegerField(default=0)
     description = models.TextField(blank=True)
+    public = models.BooleanField()
 
     def __str__(self):
         return "{0} (${1})".format(self.name, self.price)
-
-
-class PriceLevel(models.Model):
-    name = models.CharField(max_length=100)
-    priceLevelOptions = models.ManyToManyField(PriceLevelOption, blank=True)
-    description = models.TextField()
-    basePrice = models.DecimalField(max_digits=6, decimal_places=2)
-    startDate = models.DateTimeField()
-    endDate = models.DateTimeField()
-    public = models.BooleanField(default=False)
-    notes = models.TextField(blank=True)
-    group = models.TextField(blank=True)
-    emailVIP = models.BooleanField(default=False)
-    emailVIPEmails = models.CharField(max_length=400, blank=True, default="")
-    isMinor = models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.name
 
 
 class Department(models.Model):
