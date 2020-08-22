@@ -176,7 +176,10 @@ class Person(models.Model):
     shirt_size = models.CharField(max_length=3, choices=SHIRT_SIZE_CHOICES)
     birth_date = models.DateField()
     agrees_to_con_tos = models.BooleanField()
-    delete_info = models.BooleanField()
+    delete_info = models.BooleanField(blank=True)
+    # Banned
+    is_banned = models.BooleanField(blank=True)
+    reason = models.TextField(blank=True)
 
     @property
     def full_name(self):
@@ -216,20 +219,3 @@ class Staff(Person):
     def __str__(self):
         return self.full_name
 
-
-class Merchant(Person):
-    venue = models.CharField(max_length=64)
-    business_name = models.CharField(max_length=64)
-    business_license = models.FileField(upload_to="uploads/merchant/licenses/%Y/%m/%d/")
-    website = models.URLField()
-    agrees_to_merchant_tos = models.BooleanField()
-
-    def __str__(self):
-        return self.full_name
-
-
-class Banned(Person):
-    reason = models.TextField(blank=True)
-
-    def __str__(self):
-        return self.full_name
