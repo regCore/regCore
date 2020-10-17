@@ -140,7 +140,7 @@ class EmergencyContact(models.Model):
     first_name = models.CharField(max_length=32)
     last_name = models.CharField(max_length=32)
     relation = models.CharField(max_length=32)
-    phone_number = models.CharField(max_length=12, default="XXXXXXXXXX")
+    phone_number = models.CharField(max_length=15, default="XXXXXXXXXX")
     object_id = models.PositiveIntegerField()
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     content_object = GenericForeignKey("content_type", "object_id")
@@ -197,7 +197,7 @@ class Attendee(Person):
     city = models.CharField("City", max_length=1024,)
     state = models.CharField("State", max_length=64)
     country = CountryField()
-    phone_number = models.CharField(max_length=12, default="XXXXXXXXXX")
+    phone_number = models.CharField(max_length=15, default="XXXXXXXXXX")
     # emails/surveys
     agrees_to_surveys = models.BooleanField()
     request_volunteer_info = models.BooleanField()
