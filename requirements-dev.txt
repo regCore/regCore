@@ -3,4 +3,4 @@ psycopg2-binary==2.8.5
 django-debug-toolbar==2.2.1
 django-countries==6.1.2
 Pillow==8.3.2
-Django==3.1.13
+Django==3.2.9
